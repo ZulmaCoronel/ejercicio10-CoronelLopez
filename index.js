@@ -3,17 +3,21 @@ var schema = require('./schema');
 
 mongoose.connect('mongodb://localhost:27017/test');
 
-var User = mongoose.model('Blogs',schema,'blogs');
+var Blog = mongoose.model('Blog',schema,'blogs');
 
-//Documento en RAM
-var user = new User({
-    title: 'el principito',
-    author: 'Antonie ',
-    body: '96'
-});
+//Agregar blog
+
+var blog1 = new Blog({
+    title:'Ciudades de Papel',
+    author:'Jonh Green',
+    body:'Le gustaban tanto los misterios que se convirtio en uno.',
+    comments:[{body:'Regular', date:'1/05/2018'}],
+    meta: {votes:3, favs:4}
+})
+
 
 //Documento en mongoDB
-user.save(function(error){
+blog1.save(function(error){
     if(error){
         console.log(error);
         process.exit(1);
@@ -23,7 +27,7 @@ user.save(function(error){
 });
 
 //Consulta General
-User.find({}, function(error,docs){
+Blog.find({}, function(error,docs){
     if(error){
         console.log(error);
         process.exit(1);
@@ -34,7 +38,7 @@ User.find({}, function(error,docs){
 });
 
 //Consulta con restricciones
-/*User.find({author: "Antonie"}, function(error,docs){
+/*Blog.find({author: "Antonie"}, function(error,docs){
     if(error){
         console.log(error);
         process.exit(1);
@@ -45,7 +49,7 @@ User.find({}, function(error,docs){
 });*/
 
 //Actualización  con id existente
-User.update({_id: "5c7800e649ba871297af7878"}, {$set: {hidden:"true"}},function(error,docs){
+Blog.update({_id: "5c7800e649ba871297af7878"}, {$set: {hidden:"true"}},function(error,docs){
     if(error,docs){
         console.log(error);
         process.exit(1);
@@ -56,11 +60,12 @@ User.update({_id: "5c7800e649ba871297af7878"}, {$set: {hidden:"true"}},function(
 }); 
 
 //Eliminación con id existente
-User.findByIdAndRemove({_id:'5c78042f56707f165e81661b'}, function(error,docs){
+Blog.findByIdAndRemove({_id:'5c78042f56707f165e81661b'}, function(error,docs){
     if(error){
         console.log(error);
         process.exit(1);
     }
+    console.log("--------Borrado--------")
     console.log(docs);
     process.exit(0);
 });
